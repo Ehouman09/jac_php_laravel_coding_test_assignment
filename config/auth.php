@@ -42,6 +42,18 @@ return [
         ],
     ],
 
+
+
+    /**
+     * API Guard
+     * 
+     */
+    'api' => [
+        'driver' => 'sanctum', 
+        'provider' => 'users',
+        'hash' => false,
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | User Providers

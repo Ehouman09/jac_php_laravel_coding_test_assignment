@@ -30,9 +30,8 @@ class BookController extends Controller
         $books = Book::with('category')
             ->paginate(5);
 
-            dd($books);
-        
-        return view('books.index', compact('books'));
+        return $this->jsonResponse(200, "success", $books);
+
     }
 
 

@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
+//use App\Http\Controllers\BookController;
+//use App\Http\Controllers\CategoryController;
 
 
 //This is the route page of our application
@@ -31,6 +33,16 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+
+ 
+    /*
+    Route::prefix('books')->group(function () {
+        Route::get('/', [ApiBookController::class, 'index']);
+        Route::get('/{id}', [ApiBookController::class, 'show']);
+        Route::post('/', [ApiBookController::class, 'store']);
+        Route::put('/{id}', [ApiBookController::class, 'update']);
+        Route::delete('/{id}', [ApiBookController::class, 'destroy']);
+    });*/
 
 
 });

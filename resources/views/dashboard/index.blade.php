@@ -3,7 +3,9 @@
 @section('title', __('auth.login'))
 
 @section('content')
-
+{{-- 
+<img src="{{ Storage::url($book->cover_image) }}" alt="{{ $book->title }}" /> 
+--}}
 
 <div class="dashboard-ecommerce">
     <div class="container-fluid dashboard-content ">
@@ -588,7 +590,7 @@
                 <!-- end basic table  -->
                 <!-- ============================================================== -->
             </div>
-            
+
 
         </div>
     </div>

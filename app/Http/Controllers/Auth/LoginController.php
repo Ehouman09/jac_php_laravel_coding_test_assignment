@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Enums\TokenAbility;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\Web\LoginRequest;
 
 
 class LoginController extends Controller
@@ -18,7 +18,7 @@ class LoginController extends Controller
     |--------------------------------------------------------------------------
     |
     | This controller handles authenticating users for the application and
-    | redirecting them to admin dashboard.
+    | redirecting them to index if they are successfully logged in.
     |
     */
 
@@ -27,8 +27,8 @@ class LoginController extends Controller
     {
         //Before displaying the login form, let check if the user is already logged
         if (Auth::check()) {
-            //redirect user to the dashboard if he's already logged
-            return redirect()->route('dashboard')->with('warning', __('auth.yr_ar_already_logged'));
+            //redirect user to the index if he's already logged
+            return redirect()->route('books.index')->with('warning', __('auth.yr_ar_already_logged'));
         }
 
         //Display the login form if the user is not logged
@@ -49,8 +49,8 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             // Log in the user
             $request->session()->regenerate();
-            // Redirect the user to the dashboard with a success message
-            return redirect()->route('dashboard')->with('success', __('common.welcome_back'));
+            // Redirect the user to the index with a success message
+            return redirect()->route('books.index')->with('success', __('common.welcome_msg'));
         }
 
         // Display an error message if user credentials are wrong 

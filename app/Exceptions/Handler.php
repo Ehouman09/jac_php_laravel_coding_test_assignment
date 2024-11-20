@@ -14,12 +14,10 @@ class Handler extends ExceptionHandler
     /**
      * Convert an authentication exception into a response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        /*
         if ($request->expectsJson()) {
 
             return $this->jsonResponse(401, "Access denied. Please log in to continue.", null);
@@ -27,5 +25,6 @@ class Handler extends ExceptionHandler
         }
 
         return redirect()->guest($exception->redirectTo() ?? route('login'));
+        */
     }
 }

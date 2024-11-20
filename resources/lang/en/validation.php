@@ -18,4 +18,28 @@ return [
         'string' => 'The name must be a string.',
         'max' => 'The name must not be greater than 100 characters.',
     ],
+    'title' => [
+        'required' => 'The title is required.',
+        'max' => 'The title may not be greater than 255 characters.',
+    ],
+    'author' => [
+        'required' => 'The author is required.',
+        'max' => 'The author name may not be greater than 255 characters.',
+    ],
+    'description' => [
+        'required' => 'The description is required.',
+    ],
+    'category_id' => [
+        'exists' => 'The selected category is invalid.',
+    ],
+    'publication_year' => [
+        'required' => 'The publication year is required.',
+        'integer' => 'The publication year must be a valid integer.',
+        'min' => 'The publication year must be at least 1000.',
+        'max' => 'The publication year must not be greater than the current year.',
+    ],
+    'cover_image' => [
+        'image' => 'The cover image must be an image file.',
+        'max' => 'The cover image may not be greater than 2MB.',
+    ],
 ];

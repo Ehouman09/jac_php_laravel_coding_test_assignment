@@ -57,11 +57,5 @@ class Book extends Model
     {
         return $this->belongsTo(Category::class);
     }
-
-    public function getCoverImageUrlAttribute()
-    {
-        return $this->cover_image 
-            ? Storage::url($this->cover_image) 
-            : null;
-    }
+ 
 }

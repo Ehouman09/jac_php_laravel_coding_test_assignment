@@ -1,6 +1,5 @@
 <?php
 
 return [
-    'welcome_back' => "Welcome back!",
-    'password' => 'password',
+    'welcome_msg' => "Welcome to your library.",
 ];

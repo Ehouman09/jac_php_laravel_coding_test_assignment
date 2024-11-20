@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Enums\TokenAbility;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\Web\RegisterRequest;
 use App\Models\User;
 use Hash;
 

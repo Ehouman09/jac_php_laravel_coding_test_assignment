@@ -7,10 +7,12 @@ use App\Http\Controllers\BookController;
 //use App\Http\Controllers\CategoryController;
 
 
-//This is the route page of our application
-Route::get('/', [LoginController::class, 'showLoginForm']);
+
 
 Route::middleware(['web'])->group(function () {
+
+    //This is the route page of our application
+    Route::get('/', [LoginController::class, 'showLoginForm']);
 
     //This route is use to display the login page
     Route::get('/login', [LoginController::class, 'showLoginForm']);
@@ -32,7 +34,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     //Route::get('dashboard', [BookController::class, 'dashboard'])->name('dashboard');
   
 
-    Route::get('/', [BookController::class, 'index'])->name('books.index');
+    Route::get('/books', [BookController::class, 'index'])->name('books.index');
     // returns the form for adding a book
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
     // adds a book to the database

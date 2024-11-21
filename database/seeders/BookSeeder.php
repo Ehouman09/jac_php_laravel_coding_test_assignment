@@ -32,7 +32,6 @@ class BookSeeder extends Seeder
                 'description' => $faker->text(150), 
                 'publication_year' => $faker->year,  
                 'slug' => $faker->slug, 
-                'cover_image' => "default-cover-image.png",
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

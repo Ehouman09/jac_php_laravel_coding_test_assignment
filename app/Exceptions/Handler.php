@@ -32,11 +32,13 @@ class Handler extends ExceptionHandler
             // If the request expects JSON (API call)
             if ($request->expectsJson()) {
                 // Return a JSON response
-                return $this->jsonResponse(403, "You are not authorized to perform this action.", null);
+                return $this->jsonResponse(403, "You are not authorized to perform this action, your are not the owner.", null);
             }
 
             // Let redirect user back redirect back with a warning message if it's a web request
-            return redirect()->back()->with('warning', 'You are not authorized to perform this action.');
+            return redirect()->back()
+                ->with('warning', 'You are not authorized to perform this action, your are not the owner.');
+                //->setStatusCode(403);
         }
  
         // Handle not found exceptions 

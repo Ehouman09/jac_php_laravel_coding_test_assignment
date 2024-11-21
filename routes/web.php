@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\BookController;
+use App\Http\Controllers\Web\Auth\LoginController;
+use App\Http\Controllers\Web\Auth\RegisterController;
+use App\Http\Controllers\Web\BookController;
 //use App\Http\Controllers\CategoryController;
 
 
@@ -28,7 +28,7 @@ Route::middleware(['web'])->group(function () {
 });
 
 //Protected routes, requires authentication -> user must be logged in to access
-Route::middleware(['web', 'auth'])->group(function () {
+Route::middleware(['web', 'auth', 'securityHeaders', 'verifyCsrfToken'])->group(function () {
 
 
     // returns a page that lists all books in the database

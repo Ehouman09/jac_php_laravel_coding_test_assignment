@@ -89,8 +89,11 @@ class BookController extends Controller
         // If a cover image has been uploaded, It will be stored and update the book record with the path.
         if ($request->hasFile('cover_image')) {
             $coverPath = $request->file('cover_image')
-                ->store('/', 'public');
+                ->store('book_covers', 'public');
         }
+
+        // Generate slug from title
+        $validatedData['slug'] = \Str::slug($validatedData['title']). '-' .time();
 
         //Let create a new book record with the validated data and the cover image path.
         $book = Book::create([
@@ -129,16 +132,21 @@ class BookController extends Controller
         if ($request->hasFile('cover_image')) {
             
             //Delete the cover image if it exists
-            //We have to very carefully to not remove the cover image from the storage 😂
-            if ($book->cover_image&& $book->cover_image !== 'default-cover-image.png') {
+            if ($book->cover_image) {
                 Storage::delete('public/' . $book->cover_image);
             }
 
             // Store the new cover image and get the file name (not the full path)
         // If a cover image has been uploaded, It will be stored and update the book record with the path.
-            $coverPath = $request->file('cover_image')->store('/', 'public');
+            $coverPath = $request->file('cover_image')->store('book_covers', 'public');
 
             $validatedData['cover_image'] = $coverPath; 
+        }
+
+        // Check if the title has changed and regenerate the slug
+        if ($validatedData['title'] !== $book->title) {
+            // Regenerate the slug based on the new title
+            $validatedData['slug'] = \Str::slug($validatedData['title']) . '-' . time();
         }
 
         $book->update($validatedData);
@@ -175,8 +183,7 @@ class BookController extends Controller
         $this->authorize('delete', $book);
 
         // Delete the cover image if it exists
-        //We have to very carefully to not remove the cover image from the storage 😂
-        if ($book->cover_image && $book->cover_image !== 'default-cover-image.png') {
+        if ($book->cover_image) {
 
             // Get the path to the cover image
             $filePath = 'public/' . $book->cover_image;

@@ -20,8 +20,8 @@ return [
     'already_account' => "You already have an account?",
     'login_here' => "Login Here.",
     'registration_success' => "Registration successful. Welcome!",
-
- 
+    'login_success' => "Login successful. Welcome!",
+    
 
     
      

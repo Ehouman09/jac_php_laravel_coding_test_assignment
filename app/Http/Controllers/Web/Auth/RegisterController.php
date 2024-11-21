@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Web\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -63,7 +63,7 @@ class RegisterController extends Controller
          Log::info('Registration successful', ['user' => $user->id]);
  
          // Let redirect the user to the the books index with a success message
-         return redirect()->route('books.index')->with('success', __('auth.register_success'));
+         return redirect()->route('books.index')->with('success', __('auth.registration_success'));
         
     }
 

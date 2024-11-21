@@ -53,7 +53,7 @@
                             <label for="cover_image" class="col-sm-2 col-form-label">Cover Image</label>
                             <input class="form-control @error('cover_image') is-invalid @enderror" name="cover_image" type="file" accept="image/*">
                             @if($book->cover_image)
-                                <img src="{{ asset('storage/' . $book->cover_image) }}" alt="{{ $book->title }}" width="50" class="mt-2">
+                                <img src="{{ asset('storage/' . $book->cover_image) }}" alt="{{ $book->title }}" width="100" class="mt-2">
                             @endif
                             @error('cover_image')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -77,7 +77,7 @@
                         
                         <div class="row mb-3">
                             <div class="col-sm-10 text-right">
-                                <button type="submit" class="btn btn-primary">Update the book</button>
+                                <button type="submit" class="btn btn-danger">Update the book</button>
                             </div>
                         </div>
                         

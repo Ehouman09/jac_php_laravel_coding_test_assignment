@@ -73,7 +73,7 @@
                         
                         <div class="row mb-3">
                             <div class="col-sm-10 text-right">
-                                <button type="submit" class="btn btn-primary">Save the book</button>
+                                <button type="submit" class="btn btn-danger">Save the book</button>
                             </div>
                         </div>
                         

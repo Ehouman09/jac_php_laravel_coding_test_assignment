@@ -74,7 +74,7 @@
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="card">
-                        <h5 class="card-header">Books Table</h5>
+                        <h5 class="card-header">Books List</h5>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="books-table" class="table table-striped table-bordered">
@@ -96,7 +96,7 @@
                                                     @if($book->cover_image)
                                                         <img src="{{ asset('storage/' . $book->cover_image) }}" alt="{{ $book->title }}" width="50">
                                                     @else
-                                                        <span>No Image</span>
+                                                        <img src="{{ asset('storage/book_covers/default-cover-image.png') }}" alt="Default Cover Image" width="50">
                                                     @endif
                                                 </td>
                                                 <td>{{ $book->title }}</td>
@@ -123,6 +123,10 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <!-- Let add the pagination links here by using Bootstrap   -->
+                                <div class="d-flex justify-content-center mt-3">
+                                    {{ $books->links('pagination::bootstrap-4') }}
+                                </div>
                             </div>
                         </div>
                     </div>

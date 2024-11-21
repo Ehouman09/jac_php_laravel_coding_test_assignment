@@ -35,7 +35,7 @@ class BookController extends Controller
     {
 
         // Get all books with their categories using Eloquent relationship
-        $books = Book::with('category')->paginate(5);
+        $books = Book::orderBy('created_at', 'desc')->with('category')->paginate(5);
 
         // Convert the books to a resource collection for easy json response
         $books = new BookCollection($books);
@@ -61,7 +61,11 @@ class BookController extends Controller
      */
     public function create()
     {
-        return view('books.create');
+        // Get all categories for the book creation form.
+        $categories = Category::all();
+
+
+        return view('books.create', compact('categories'));
     }
 
 
@@ -114,7 +118,10 @@ class BookController extends Controller
         // Authorize the user to update the book.
         $this->authorize('update', $book);
 
-        return view('books.edit', compact('book'));
+        // Get all categories for the book edit form.
+        $categories = Category::all();
+
+        return view('books.edit', compact('book', 'categories'));
     }
 
 

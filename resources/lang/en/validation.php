@@ -41,5 +41,7 @@ return [
     'cover_image' => [
         'image' => 'The cover image must be an image file.',
         'max' => 'The cover image may not be greater than 2MB.',
+        'mimes' => 'The cover image must be a JPEG, PNG or JPG file.',
+        'required' => 'The cover image is required.',
     ],
 ];

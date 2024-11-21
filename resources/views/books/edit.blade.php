@@ -50,9 +50,27 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="cover_image" class="col-sm-2 col-form-label">Cover image</label>
+                            <label for="cover_image" class="col-sm-2 col-form-label">Cover Image</label>
                             <input class="form-control @error('cover_image') is-invalid @enderror" name="cover_image" type="file" accept="image/*">
+                            @if($book->cover_image)
+                                <img src="{{ asset('storage/' . $book->cover_image) }}" alt="{{ $book->title }}" width="50" class="mt-2">
+                            @endif
                             @error('cover_image')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category_id">Category</label>
+                            <select id="category_id" name="category_id" class="form-control @error('category_id') is-invalid @enderror">
+                                <option value="">-- Select a Category --</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ old('category_id', $book->category_id) == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('category_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

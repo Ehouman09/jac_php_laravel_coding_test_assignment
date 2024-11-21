@@ -4,7 +4,7 @@
         <div class="nav-left-sidebar sidebar-dark">
             <div class="menu-list">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <a class="d-xl-none d-lg-none" href="/">Dashboard</a>
+                    <a class="d-xl-none d-lg-none" href="{{ route('books.index') }}">Library</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -14,7 +14,7 @@
                                 Menu
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link active" href="#"><i class="fa fa-fw fa-book"></i>Book List </a>
+                                <a class="nav-link active" href="{{ route('books.index') }}"><i class="fa fa-fw fa-book"></i>Book List </a>
                             </li>
                             
                         </ul>

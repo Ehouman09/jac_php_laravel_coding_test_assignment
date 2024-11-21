@@ -42,7 +42,7 @@ class BookController extends Controller
     public function index()
     {
          // Get all books with their categories using Eloquent relationship
-         $books = Book::with('category')->paginate(5);
+         $books = Book::orderBy('created_at', 'desc')->with('category')->paginate(5);
 
          // Convert the books to a resource collection for easy json response
          $booksCollection = new BookCollection($books);

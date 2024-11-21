@@ -20,8 +20,8 @@ return new class extends Migration
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
             $table->string('title');
             $table->string('author');
-            $table->text('description')->nullable();
-            $table->year('publication_year');
+            $table->text('description');
+            $table->integer('publication_year');
             $table->string('cover_image')->nullable();
             $table->string('slug')->nullable()->unique();
             $table->timestamps();

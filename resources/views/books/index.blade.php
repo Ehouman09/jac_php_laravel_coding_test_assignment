@@ -82,6 +82,7 @@
                                         <tr>
                                             <th>Cover Image</th>
                                             <th>Title</th>
+                                            <th>Category</th>
                                             <th>Author</th>
                                             <th>Publication Year</th>
                                             <th>Registration Date</th>
@@ -99,6 +100,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $book->title }}</td>
+                                                <td>{{ $book->category?->name }}</td>
                                                 <td>{{ $book->author }}</td>
                                                 <td>{{ $book->publication_year }}</td>
                                                 <td>{{ $book->created_at->format('Y-m-d') }}</td>

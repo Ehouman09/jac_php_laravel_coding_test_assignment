@@ -13,8 +13,7 @@ use App\Http\Resources\Api\V1\BookCollection;
 use App\Http\Requests\Api\V1\BookRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\Api\V1\BookResource;
-use App\Http\Policies\BookPolicy;
-
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -120,6 +119,7 @@ class BookController extends Controller
 
     public function update(BookRequest $request, Book $book)
     {
+        // Authorize the user to update the book.
         $this->authorize('update', $book);
         
         $validatedData = $request->validated();
@@ -171,6 +171,7 @@ class BookController extends Controller
     {
 
 
+        // Authorize the user to delete the book.
         $this->authorize('delete', $book);
 
         // Delete the cover image if it exists
@@ -192,7 +193,6 @@ class BookController extends Controller
 
         // Log the book deletion event in the application log.
         Log::info('Book deletion from API', [
-            'book_id' => $bookResource->id, 
             'user_id' => Auth::user()->id
         ]);
 

@@ -30,10 +30,8 @@ Route::middleware(['web'])->group(function () {
 //Protected routes, requires authentication -> user must be logged in to access
 Route::middleware(['web', 'auth'])->group(function () {
 
-    //This route is use to display the dashboard page
-    //Route::get('dashboard', [BookController::class, 'dashboard'])->name('dashboard');
-  
 
+    // returns a page that lists all books in the database
     Route::get('/books', [BookController::class, 'index'])->name('books.index');
     // returns the form for adding a book
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
@@ -42,21 +40,12 @@ Route::middleware(['web', 'auth'])->group(function () {
     // returns a page that shows a full book
     Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
     // returns the form for editing a book
-    Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
+    Route::get('/books/edit/{book}', [BookController::class, 'edit'])->name('books.edit');
     // updates a book
     Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
     // deletes a book
     Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
     
-    /*
-    Route::prefix('dashboard')->group(function () {
-        Route::get('/', [BookController::class, 'index'])->name('dashboard');
-        Route::get('/{id}', [BookController::class, 'show']);
-        Route::post('/', [BookController::class, 'store']);
-        Route::put('/{id}', [BookController::class, 'update']);
-        Route::delete('/{id}', [BookController::class, 'destroy']);
-    });
-    */
 
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 

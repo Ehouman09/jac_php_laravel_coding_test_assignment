@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use App\Enums\TokenAbility;
 use App\Http\Requests\Api\V1\LoginRequest;
 use App\Traits\JsonResponseTrait;
 use App\Http\Resources\Api\V1\UserResource;

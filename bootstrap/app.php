@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use App\Exceptions\Handler as CustomHandler;
 
 use Illuminate\Http\Request;
 
@@ -25,4 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
        // Let use our custom exception handler
     })
+    ->withSingletons([
+        ExceptionHandler::class => CustomHandler::class,
+    ])
     ->create();

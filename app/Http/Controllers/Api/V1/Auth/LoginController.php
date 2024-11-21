@@ -11,6 +11,7 @@ use App\Enums\TokenAbility;
 use App\Http\Requests\Api\V1\LoginRequest;
 use App\Traits\JsonResponseTrait;
 use App\Http\Resources\Api\V1\UserResource;
+use Illuminate\Support\Facades\Log;
 
 
 class LoginController extends Controller
@@ -38,7 +39,12 @@ class LoginController extends Controller
          
         $credentials = $request->validated();
 
+        // Log the login attempt
+        Log::info('Login attempt from the API', ['credentials' => $credentials['email']]);
+
         if (!Auth::attempt($credentials)) {
+            // Log the failed login attempt
+            Log::error('Login failed from the API', ['credentials' => $credentials['email']]);
 
             // Send an error message if user credentials are wrong
             return $this->jsonResponse(401, __('auth.invalid_credentials'), null);
@@ -49,11 +55,16 @@ class LoginController extends Controller
 
         // Generate a new token for the user
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        $userResource = new UserResource($user);
+
+        // Log the successful login
+        Log::info('Login successful from the API', ['user' => $user->id]);
   
         // Return the token and user
         $data = [
             'token' => $token,
-            'user' => new UserResource($user)
+            'user' => $userResource
         ];
         
         return $this->jsonResponse(200, "success", $data);

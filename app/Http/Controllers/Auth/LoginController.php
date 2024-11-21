@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Enums\TokenAbility;
 use App\Http\Requests\Web\LoginRequest;
-
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -45,13 +45,20 @@ class LoginController extends Controller
          
         $credentials = $request->validated();
 
+        // Log the login attempt
+        Log::info('Login attempt from the web', ['credentials' => $credentials['email']]);
 
         if (Auth::attempt($credentials)) {
+            // Log the successful login
+            Log::info('Login successful from the web', ['user' => Auth::user()->id]);
             // Log in the user
             $request->session()->regenerate();
             // Redirect the user to the index with a success message
             return redirect()->route('books.index')->with('success', __('common.welcome_msg'));
         }
+
+        // Log the failed login attempt
+        Log::error('Login failed from the web', ['credentials' => $credentials['email']]);
 
         // Display an error message if user credentials are wrong 
         return redirect()->back()->with('error', __('auth.invalid_credentials'))->withInput($credentials);
@@ -64,6 +71,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        // Log out the user
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

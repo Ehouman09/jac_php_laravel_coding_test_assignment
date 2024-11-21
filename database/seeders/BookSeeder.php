@@ -35,7 +35,6 @@ class BookSeeder extends Seeder
                 'cover_image' => "default-cover-image.png",
                 'created_at' => now(),
                 'updated_at' => now(),
-                'deleted_at' => null,
             ]);
         }
         

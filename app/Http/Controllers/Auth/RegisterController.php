@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Enums\TokenAbility;
 use App\Http\Requests\Web\RegisterRequest;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Hash;
 
@@ -19,7 +20,7 @@ class RegisterController extends Controller
     |--------------------------------------------------------------------------
     |
     | This controller handles users registration for the application and
-    | redirecting them to the dashboard.
+    | redirecting them to the book index page.
     |
     */
 
@@ -29,8 +30,8 @@ class RegisterController extends Controller
     {
         //Before displaying the registration form, let check if the user is already logged
         if (Auth::check()) {
-            //redirect user to the dashboard if he's already logged
-            return redirect()->route('dashboard')->with('warning', __('auth.yr_ar_already_logged'));
+            //redirect user to the books index if he's already logged
+            return redirect()->route('books.index')->with('warning', __('auth.yr_ar_already_logged'));
         }
 
         //Display the registration form if the user is not logged
@@ -58,8 +59,11 @@ class RegisterController extends Controller
          // Log in the new user
          Auth::login($user);
  
-         // Let redirect the user to the dashboard with a success message
-         return redirect()->route('dashboard')->with('success', __('auth.register_success'));
+         // Log the successful registration
+         Log::info('Registration successful', ['user' => $user->id]);
+ 
+         // Let redirect the user to the the books index with a success message
+         return redirect()->route('books.index')->with('success', __('auth.register_success'));
         
     }
 

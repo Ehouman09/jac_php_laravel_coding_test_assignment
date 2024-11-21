@@ -26,17 +26,17 @@ class CategorySeeder extends Seeder
         // Each category has an ID, name, and slug
         // The ID is generated using the Str::uuid() method
         $categories = [
-            ['id' => Str::uuid(), 'name' => 'Fiction', 'slug' => 'fiction'],
-            ['id' => Str::uuid(), 'name' => 'Non-fiction', 'slug' => 'non-fiction'],
-            ['id' => Str::uuid(), 'name' => 'Science Fiction', 'slug' => 'science-fiction'],
-            ['id' => Str::uuid(), 'name' => 'Manga', 'slug' => 'manga'],
-            ['id' => Str::uuid(), 'name' => 'Biography', 'slug' => 'biography'],
+            ['id' => Str::uuid(), 'name' => 'Fiction', 'slug' => 'fiction', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => Str::uuid(), 'name' => 'Non-fiction', 'slug' => 'non-fiction', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => Str::uuid(), 'name' => 'Science Fiction', 'slug' => 'science-fiction', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => Str::uuid(), 'name' => 'Manga', 'slug' => 'manga', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => Str::uuid(), 'name' => 'Biography', 'slug' => 'biography', 'created_at' => now(), 'updated_at' => now()],
         ];
 
         // Insert the categories into the database using the insert method
         Category::insert($categories);
  
- 
+        
  
         
     }

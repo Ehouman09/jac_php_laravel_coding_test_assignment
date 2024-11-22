@@ -14,6 +14,7 @@ use App\Http\Requests\Api\V1\BookRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\Api\V1\BookResource;
 use Illuminate\Support\Facades\Storage;
+use App\Events\BookAddedEvent;
 
 class BookController extends Controller
 {
@@ -41,14 +42,21 @@ class BookController extends Controller
      */
     public function index()
     {
-         // Get all books with their categories using Eloquent relationship
-         $books = Book::orderBy('created_at', 'desc')->with('category')->paginate(5);
+         //For better performance, let load the books list from the cache
+        //This improves performance by reducing the number of database queries
+        // Get all books with their categories using Eloquent relationship
+        //So I commented below because I'm using cache
+         //$books = Book::orderBy('created_at', 'desc')->with('category')->paginate(5);
+
+         // Get all books with their categories using cache
+        //The cache is stored for 30 minutes by default
+        $books = $this->cacheBooksListing();
 
          // Convert the books to a resource collection for easy json response
          $booksCollection = new BookCollection($books);
 
 
-        return $this->jsonResponse(200, "success", $booksCollection);
+        return $this->jsonResponse(200, "book listing", $booksCollection);
 
     }
 
@@ -65,7 +73,7 @@ class BookController extends Controller
 
         $bookResource = new BookResource($book);
 
-        return $this->jsonResponse(200, "success", $bookResource);
+        return $this->jsonResponse(200, "book details", $bookResource);
         
     }
 
@@ -106,18 +114,15 @@ class BookController extends Controller
 
             $bookResource = new BookResource($book);
 
-            // Log the book creation event in the application log.
-            Log::info('Book created from API', [
-                'book_id' => $bookResource->id,
-                'user_id' => Auth::user()->id
-            ]);
+            /// Emit the book added event
+            BookAddedEvent::dispatch($book);
 
             // Delete the library state from the cache after creating a new book in order to prevent incorrect counts
-            $this->deleteLibraryStateFromCache();
+            $this->clearBooksCache();
 
             // Return the created book as a JSON response with a 201 status code.
             //201 status code indicates that the request has been fulfilled and that a new resource has been created
-            return $this->jsonResponse(201, "success", $bookResource);
+            return $this->jsonResponse(201, "book created", $bookResource);
 
         } catch (\Exception $e) {
                 
@@ -184,14 +189,14 @@ class BookController extends Controller
         
         $bookResource = new BookResource($book);
 
-            // Log the book update event in the application log.
+        // Log the book update event in the application log.
         Log::info(
             'Book updated from API', [
             'book_id' => $bookResource->id,
             'user_id' => Auth::user()->id
         ]);
 
-        return $this->jsonResponse(200, "success", $bookResource);
+        return $this->jsonResponse(200, "book updated", $bookResource);
 
  
     }
@@ -237,9 +242,9 @@ class BookController extends Controller
 
         // Delete the library state from the cache after creating a new book 
         //in order to prevent incorrect counts on the web page
-        $this->deleteLibraryStateFromCache();
+        $this->clearBooksCache();
 
-        return $this->jsonResponse(200, "success", null); 
+        return $this->jsonResponse(200, "book deleted", null); 
     }
 
 

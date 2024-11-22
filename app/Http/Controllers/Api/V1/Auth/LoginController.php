@@ -66,7 +66,7 @@ class LoginController extends Controller
             'user' => $userResource
         ];
         
-        return $this->jsonResponse(200, "success", $data);
+        return $this->jsonResponse(200, "You are logged in", $data);
  
         
     }
@@ -77,11 +77,13 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+       // Revoke the user's personal access token for Sanctum
+        Auth::user()->tokens->each(function ($token) {
+            $token->delete();
+        });
 
-        return redirect('/');
+        return $this->jsonResponse(200, "You are logged out", null);
+ 
     }
 
 

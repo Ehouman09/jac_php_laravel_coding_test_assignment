@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Api\V1;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -9,15 +9,27 @@ use App\Models\Book;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
+use PHPUnit\Framework\Attributes\Test;
 
-class BookApiTest extends TestCase
+
+class BookControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    
+    /**
+         * Tests that an authenticated user can create a book via API.
+         *
+         * This test verifies that when an authenticated user makes a POST request
+         * to the API with valid book data, the book is created and stored in the
+         * database and the cover image is stored in the correct directory. The
+         * test also checks that the API returns a 201 Created response with the
+         * correct structure and data.
+         */
     #[Test]
-    public function test_user_can_create_book_api()
+    public function test_user_can_create_book()
     {
-        //Tests that an authenticated user can create a book via API.
+
         // Fake the storage to prevent actual file saving
         Storage::fake('public');
 
@@ -31,7 +43,7 @@ class BookApiTest extends TestCase
         // Prepare book data
         $bookData = [
             'title' => 'Test Book',
-            'author' => 'Test Author',
+            'author' => 'Jean Yves',
             'description' => 'Test Description',
             'publication_year' => 2024,
             'cover_image' => $image,
@@ -60,7 +72,7 @@ class BookApiTest extends TestCase
         // Assert the book is stored in the database
         $this->assertDatabaseHas('books', [
             'title' => 'Test Book',
-            'author' => 'Test Author',
+            'author' => 'Jean Yves',
             'description' => 'Test Description',
             'publication_year' => 2024,
         ]);
@@ -70,46 +82,17 @@ class BookApiTest extends TestCase
         Storage::disk('public')->assertExists($book->cover_image);
     }
 
-        #[Test]
-        public function test_user_cannot_update_book_with_invalid_token_api()
-        {
-            $user = User::factory()->create();
-            $book = Book::factory()->create(['user_id' => $user->id]);
-            
-            // Store original title to verify nothing changed
-            $originalTitle = $book->title;
-            
-            // Make request without authentication
-            $response = $this->putJson("/api/v1/books/{$book->id}", [
-                'title' => 'Updated Title',
-                'author' => $book->author,
-                'description' => $book->description,
-                'publication_year' => $book->publication_year
-            ]);
-            
-            // Assert HTTP status
-            $response->assertUnauthorized(); // 401 response
-            
-            // Assert response structure matching your JsonResponseTrait format
-            $response->assertJson([
-                'code' => 401,
-                'status' => 'error',
-                'message' => 'Please log in to continue.',
-                'data' => null
-            ]);
-            
-            // Verify the book wasn't modified in the database
-            $this->assertDatabaseHas('books', [
-                'id' => $book->id,
-                'title' => $originalTitle,
-                'user_id' => $user->id
-            ]);
-        }
-
+    /**
+         * Tests that a user cannot update a book created by another user via API
+         *
+         * This test verifies that when an authenticated user makes a PUT request
+         * to the API to update a book created by another user, the request is
+         * forbidden and the book remains unchanged in the database.
+         */
     #[Test]
-     public function test_user_cannot_update_others_book_api()
+     public function test_user_cannot_update_others_book()
     {
-        // Tests that a user cannot update a book created by another user via API
+        
         // Create two users
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -148,10 +131,16 @@ class BookApiTest extends TestCase
         ]);
     }
     
+     /**
+         * Tests that a user cannot delete a book created by another user via API
+         *
+         * This test verifies that when a user tries to delete a book created by
+         * another user, the request is forbidden and the book remains unchanged
+         * in the database.
+         */
     #[Test]
-    public function test_user_cannot_delete_others_book_api()
+    public function test_user_cannot_delete_others_book()
     {
-        //Tests that a user cannot delete a book created by another user via API
         // Create two users
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();

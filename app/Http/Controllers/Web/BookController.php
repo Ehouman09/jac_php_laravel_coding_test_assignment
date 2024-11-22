@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Cache;
 use App\Traits\BooksCachingTrait;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Events\BookAddedEvent;
+
 
 
 class BookController extends Controller
@@ -34,8 +36,15 @@ class BookController extends Controller
     public function index()
     {
 
-        // Get all books with their categories using Eloquent relationship
-        $books = Book::orderBy('created_at', 'desc')->with('category')->paginate(5);
+        //For better performance, let load the books list from the cache
+        //This improves performance by reducing the number of database queries
+        //So I commented below because I'm using cache
+        //$books = Book::orderBy('created_at', 'desc')->with('category')->paginate(5);
+        
+        // Get all books with their categories using cache
+        //The cache is stored for 30 minutes by default
+        $books = $this->cacheBooksListing();
+  
 
         // Convert the books to a resource collection for easy json response
         $books = new BookCollection($books);
@@ -104,13 +113,12 @@ class BookController extends Controller
                 'slug' => $slug
             ]);
 
-            Log::info('Book created successfully', [
-                'user_id' => Auth::user()->id,
-                'book_id' => $book->id
-            ]);
+            // Emit the book added event
+            BookAddedEvent::dispatch($book);
+
 
             // Delete the library state from the cache
-            $this->deleteLibraryStateFromCache();
+            $this->clearBooksCache();
             
             return redirect()->route('books.index')
                 ->with('success', __('book.book_created_successfully'));
@@ -240,7 +248,7 @@ class BookController extends Controller
 
         // Delete the library state from the cache after creating a new book 
         //in order to prevent incorrect counts on the web page
-        $this->deleteLibraryStateFromCache();
+        $this->clearBooksCache();
 
         // Redirect to the books index page with a success message.
         return redirect()->route('books.index')

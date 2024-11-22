@@ -1,111 +1,145 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class BookModelTest extends TestCase
 {
     use RefreshDatabase;
 
-    #[test]
+
+    /**
+     * Tests that a book can be created in the database.
+     *
+     * This test verifies that a book can be successfully created with the
+     * required data and that the user_id is properly associated with the
+     * book.
+     */
+    #[Test]
     public function it_can_create_a_book()
     {
         // Arrange: Create necessary data
-        $user = User::factory()->create(); // Ensure a user is created
+        $user = User::factory()->create(); // Create a user
         $category = Category::factory()->create(); // Create a category
 
         $data = [
-            'user_id' => $user->id, // Set user_id here
-            'category_id' => $category->id, 
-            'title' => 'Sample Book',
-            'author' => 'John Doe',
+            'user_id' => $user->id, // User ID
+            'category_id' => $category->id, // Category ID
+            'title' => 'My Book',
+            'author' => 'Jean Yves',
             'description' => 'A test book.',
             'publication_year' => 2024,
-            'slug' => 'sample-book',
+            'slug' => 'my-book',
         ];
 
         // Act: Create a book
         $book = Book::create($data);
 
-        // Assert: Ensure the book was saved to the database
+        // Assert: Ensure the book was created
         $this->assertDatabaseHas('books', [
-            'title' => 'Sample Book',
-            'author' => 'John Doe',
+            'title' => 'My Book',
+            'author' => 'Jean Yves',
             'description' => 'A test book.',
             'publication_year' => 2024,
-            'slug' => 'sample-book',
+            'slug' => 'my-book',
             'user_id' => $user->id, // Check that the user_id is properly set
         ]);
     }
 
-    #[test]
+   
+    /**
+     * Tests that a book belongs to a category.
+     *
+     * This test verifies the relationship between a book and its associated
+     * category, ensuring that the category_id of the book matches the id
+     * of the category it is related to.
+     */
+    #[Test]
     public function it_belongs_to_a_category()
     {
         // Arrange: Create necessary data
-        $user = User::factory()->create();
-        $category = Category::factory()->create();
+        $user = User::factory()->create(); // create a new user
+        $category = Category::factory()->create(); // create a new category
 
         $book = Book::create([
-            'user_id' => $user->id, 
-            'category_id' => $category->id, 
-            'title' => 'Sample Book',
-            'author' => 'John Doe',
+            'user_id' => $user->id, // user id
+            'category_id' => $category->id, // category id
+            'title' => 'My Book',
+            'author' => 'Jean Yves',
             'description' => 'A test book.',
             'publication_year' => 2024,
-            'slug' => 'sample-book',
+            'slug' => 'my-book',
         ]);
 
         // Act: Check the relationship
         $this->assertEquals($category->id, $book->category->id);
     }
 
-    #[test]
+ 
+    /**
+     * Tests that a book can be updated.
+     *
+     * This test verifies that a book can be successfully updated in the
+     * database. It ensures that the book's title, author, description, publication
+     * year, and slug are all updated correctly.
+     */
+    #[Test]
     public function it_can_update_a_book()
     {
         // Arrange: Create necessary data
-        $user = User::factory()->create();
-        $category = Category::factory()->create();
+        $user = User::factory()->create();//Create a new user
+        $category = Category::factory()->create();//Create a  new category
         $book = Book::create([
             'user_id' => $user->id, 
             'category_id' => $category->id,
-            'title' => 'Original Title',
-            'author' => 'Original Author',
-            'description' => 'Original Description',
-            'publication_year' => 2022,
-            'slug' => 'original-title',
+            'title' => 'My new book',
+            'author' => 'Jean Yves',
+            'description' => 'A test book.',
+            'publication_year' => 2023,
+            'slug' => 'my-new-book',
         ]);
 
         // Act: Update the book
         $book->update([
-            'title' => 'Updated Title',
-            'author' => 'Updated Author',
-            'description' => 'Updated Description',
-            'publication_year' => 2023,
-            'slug' => 'updated-title',
+            'title' => 'My new book updated',
+            'author' => 'Ehouman',
+            'description' => 'A test book updated description.',
+            'publication_year' => 2024,
+            'slug' => 'my-new-book-updated',
         ]);
 
         // Assert: Ensure the book was updated
         $this->assertDatabaseHas('books', [
             'id' => $book->id,
-            'title' => 'Updated Title',
-            'author' => 'Updated Author',
-            'description' => 'Updated Description',
-            'publication_year' => 2023,
-            'slug' => 'updated-title',
+            'title' => 'My new book updated',
+            'author' => 'Ehouman',
+            'description' => 'A test book updated description.',
+            'publication_year' => 2024,
+            'slug' => 'my-new-book-updated',
         ]);
     }
 
-    #[test]
+ 
+    /**
+     * Tests that a book can be deleted from the database.
+     *
+     * This test verifies that a book can be successfully deleted and
+     * ensures that the book is soft deleted by checking the soft deleted state
+     * in the database.
+     */
+    #[Test]
     public function it_can_delete_a_book()
     {
         // Arrange: Create necessary data
-        $user = User::factory()->create();
-        $category = Category::factory()->create();
+        $user = User::factory()->create(); // create a new user
+        $category = Category::factory()->create(); // create a new category
+        
         $book = Book::create([
             'user_id' => $user->id, 
             'category_id' => $category->id,
@@ -126,12 +160,21 @@ class BookModelTest extends TestCase
         ]);
     }
 
-    #[test]
+
+    /**
+     * Tests that a book can be soft deleted from the database.
+     *
+     * This test verifies that a book can be successfully soft deleted and
+     * ensures that the book is soft deleted by checking the soft deleted state
+     * in the database.
+     */
+    #[Test]
     public function it_can_soft_delete_a_book()
     {
         // Arrange: Create necessary data
-        $user = User::factory()->create();
-        $category = Category::factory()->create();
+        $user = User::factory()->create(); // create a new user
+        $category = Category::factory()->create(); // create a new category
+
         $book = Book::create([
             'user_id' => $user->id, 
             'category_id' => $category->id,
@@ -149,12 +192,21 @@ class BookModelTest extends TestCase
         $this->assertSoftDeleted($book);
     }
 
-    #[test]
+
+    /**
+     * Test that a soft-deleted book can be restored.
+     *
+     * This test verifies that a book, once soft-deleted, can be successfully
+     * restored back to its original state in the database. It ensures that
+     * the book's data is accurate and matches the initial attributes.
+     */
+    #[Test]
     public function it_can_restore_a_soft_deleted_book()
     {
         // Arrange: Create necessary data
-        $user = User::factory()->create();
-        $category = Category::factory()->create();
+        $user = User::factory()->create(); // create a new user
+        $category = Category::factory()->create(); // create a new category
+
         $book = Book::create([
             'user_id' => $user->id, 
             'category_id' => $category->id,

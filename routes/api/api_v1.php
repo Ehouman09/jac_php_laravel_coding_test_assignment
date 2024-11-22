@@ -35,6 +35,14 @@ Route::prefix('books')->group(function () {
             // Delete a book
             Route::delete('/{book}', [BookController::class, 'destroy']);
 
+
+
         });
 
     });
+
+
+Route::middleware(['auth:sanctum', 'securityHeaders'])->group(function () {
+    //logout
+    Route::get('/logout', [LoginController::class, 'logout'])->name('api.logout');;
+});

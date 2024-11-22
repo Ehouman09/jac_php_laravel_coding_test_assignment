@@ -15,11 +15,8 @@ class BookFactory extends Factory
      */
     public function definition(): array
     {
-         // get our created user by his email (admin@demo.com) 
-         //$user = User::where('email', 'admin@demo.com')->first();
-
+        
         return [
-            //'user_id' => $user->id, // Let assign the user to the book
             'title' => fake()->sentence(3),  
             'author' => fake()->name, 
             'description' => fake()->text(150), 

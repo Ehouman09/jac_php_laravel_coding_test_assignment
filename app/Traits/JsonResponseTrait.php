@@ -19,6 +19,7 @@ trait JsonResponseTrait
         return response(
             [
                 'code' => $code,
+                'status' => $code == 200 || $code == 201 ? 'success' : 'error',
                 'message' => $message,
                 'data' => $data,
             ],

@@ -8,7 +8,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use App\Traits\JsonResponseTrait;
 use Throwable;
@@ -34,11 +34,26 @@ class Handler extends ExceptionHandler
                 // Return a JSON response
                 return $this->jsonResponse(403, "You are not authorized to perform this action, your are not the owner.", null);
             }
-
+            
             // Let redirect user back redirect back with a warning message if it's a web request
             return redirect()->back()
                 ->with('warning', 'You are not authorized to perform this action, your are not the owner.');
-                //->setStatusCode(403);
+                // For web requests, abort with 403
+            //return abort(403, 'You are not authorized to perform this action.');
+        } 
+        // Handle validation errors
+        if ($exception instanceof ValidationException) {
+
+            Log::error('ValidationException:', ['exception' => $exception]);
+            if ($request->expectsJson()) {
+                // Return a JSON response 
+                return $this->jsonResponse(
+                    422, 
+                    $exception->validator->errors(), 
+                    null
+                );
+            }
+             
         }
  
         // Handle not found exceptions 

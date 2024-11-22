@@ -90,25 +90,42 @@ class BookController extends Controller
                 ->store('book_covers', 'public');
         }
 
-        // Generate slug from title
-        $validatedData['slug'] = \Str::slug($validatedData['title']). '-' .time();
+        
+        try {
 
-        //Let create a new book record with the validated data and the cover image path.
-        $book = Book::create([
-            ...$validatedData,
-            'user_id' => Auth::user()->id,
-            'cover_image' => $coverPath
-        ]);
+            // Generate slug from title
+            $slug = \Str::slug($validatedData['title']). '-' .time();
 
-        // Log the book creation event in the application log.
-        Log::info('Book created from the web', ['book_id' => $book->id]);
+            //Let create a new book record with the validated data and the cover image path.
+            $book = Book::create([
+                ...$validatedData,
+                'user_id' => Auth::user()->id,
+                'cover_image' => $coverPath,
+                'slug' => $slug
+            ]);
 
-        // Delete the library state from the cache
-        $this->deleteLibraryStateFromCache();
+            Log::info('Book created successfully', [
+                'user_id' => Auth::user()->id,
+                'book_id' => $book->id
+            ]);
 
-        // Redirect to the books index page with a success message.
-        return redirect()->route('books.index')
-            ->with('success', __('book.book_created_successfully'));
+            // Delete the library state from the cache
+            $this->deleteLibraryStateFromCache();
+            
+            return redirect()->route('books.index')
+                ->with('success', __('book.book_created_successfully'));
+                
+        } catch (\Exception $e) {
+
+            Log::error('Book creation failed', [
+                'user_id' => Auth::user()->id,
+                'error' => $e->getMessage()
+            ]);
+            
+            return redirect()->route('books.index')
+                ->with('error', __('book.book_creation_failed'));
+        }
+        
     }
 
 
@@ -164,13 +181,26 @@ class BookController extends Controller
         }
 
         // Update the book record with the validated data
-        $book->update($validatedData);
+        $isUpdated = $book->update($validatedData);
+
+        if (!$isUpdated) {
+
+            Log::error(
+                'Book update failed from the web', [
+                'user_id' => Auth::user()->id,
+                'book_id' => $book->id
+            ]);
+
+            return redirect()->route('books.index')
+                ->with('error', __('book.book_update_failed'));
+        }
  
 
         // Log the book update event in the application log.
         Log::info(
             'Book updated from the web', [
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'book_id' => $book->id
         ]);
 
          // Redirect to the books index page with a success message.

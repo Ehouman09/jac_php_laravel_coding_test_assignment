@@ -92,42 +92,61 @@ class BookController extends Controller
                 ->store('book_covers', 'public');
         }
 
+        try {
         // Generate slug from title
-        $validatedData['slug'] = \Str::slug($validatedData['title']). '-' .time();
+            $slug = \Str::slug($validatedData['title']). '-' .time();
 
-        //Let create a new book record with the validated data and the cover image path.
-        $book = Book::create([
-            ...$validatedData,
-            'user_id' => Auth::user()->id,
-            'cover_image' => $coverPath
-        ]);
+            //Let create a new book record with the validated data and the cover image path.
+            $book = Book::create([
+                ...$validatedData,
+                'user_id' => Auth::user()->id,
+                'cover_image' => $coverPath,
+                'slug' => $slug
+            ]);
 
-        $bookResource = new BookResource($book);
+            $bookResource = new BookResource($book);
 
-        // Log the book creation event in the application log.
-        Log::info('Book created from API', [
-            'book_id' => $bookResource->id,
-            'user_id' => Auth::user()->id
-        ]);
+            // Log the book creation event in the application log.
+            Log::info('Book created from API', [
+                'book_id' => $bookResource->id,
+                'user_id' => Auth::user()->id
+            ]);
 
-        // Delete the library state from the cache after creating a new book in order to prevent incorrect counts
-        $this->deleteLibraryStateFromCache();
+            // Delete the library state from the cache after creating a new book in order to prevent incorrect counts
+            $this->deleteLibraryStateFromCache();
 
-        // Return the created book as a JSON response with a 201 status code.
-        //201 status code indicates that the request has been fulfilled and that a new resource has been created
-        return $this->jsonResponse(201, "success", $bookResource);
+            // Return the created book as a JSON response with a 201 status code.
+            //201 status code indicates that the request has been fulfilled and that a new resource has been created
+            return $this->jsonResponse(201, "success", $bookResource);
+
+        } catch (\Exception $e) {
+                
+            Log::error('Book creation failed', [
+                'user_id' => Auth::user()->id,
+                'error' => $e->getMessage()
+            ]);
+            
+            return $this->jsonResponse(500, "error", null);
+        }
 
     }
 
 
+    /**
+     * Update the specified book in the database.
+     * 
+     * Validates the incoming request data and updates a book record,
+     * including uploading the cover image if provided. Logs the book update
+     * and returns the updated book as a JSON response with a 200 status code.
+     * 
+     */
     public function update(BookRequest $request, Book $book)
-    {
+    { 
         // Authorize the user to update the book.
         $this->authorize('update', $book);
         
         $validatedData = $request->validated();
-        
-
+ 
         // Check if a cover image is uploaded
         if ($request->hasFile('cover_image')) {
             
@@ -149,11 +168,23 @@ class BookController extends Controller
             $validatedData['slug'] = \Str::slug($validatedData['title']) . '-' . time();
         }
 
-        $book->update($validatedData);
+        $isUpdated = $book->update($validatedData);
 
+        //Check if the book has been updated
+        if (!$isUpdated) {
+
+            // Log the book update event in the application log.
+            Log::error(
+                'Book update failed from API', [
+                'book_id' => $book->id,
+                'user_id' => Auth::user()->id
+            ]); 
+            return $this->jsonResponse(500, "error", null);
+        }
+        
         $bookResource = new BookResource($book);
 
-        // Log the book update event in the application log.
+            // Log the book update event in the application log.
         Log::info(
             'Book updated from API', [
             'book_id' => $bookResource->id,
@@ -161,6 +192,7 @@ class BookController extends Controller
         ]);
 
         return $this->jsonResponse(200, "success", $bookResource);
+
  
     }
 

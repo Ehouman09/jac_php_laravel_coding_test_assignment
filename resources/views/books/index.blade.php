@@ -4,6 +4,29 @@
 
 @section('content')
 
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this book?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                <!-- The form is submitted once confirmed -->
+                <form id="deleteForm" action="" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="dashboard-ecommerce">
     <div class="container-fluid dashboard-content">
 
@@ -111,13 +134,9 @@
                                                     </a>
 
                                                     <!-- Delete Button -->
-                                                    <form action="{{ route('books.destroy', $book->id) }}" method="POST" style="display:inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm rounded-11" data-bs-toggle="tooltip" data-bs-original-title="Delete">
-                                                            <i class="fas fa-trash-alt text-white"></i>                        
-                                                        </button>
-                                                    </form>
+                                                    <button type="button" class="btn btn-danger btn-sm rounded-11 delete-btn" data-url="{{ route('books.destroy', $book->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                        <i class="fas fa-trash-alt text-white"></i>
+                                                    </button>
                                                  </td>
                                             </tr>
                                         @endforeach

@@ -21,8 +21,7 @@ return [
     'login_here' => "Login Here.",
     'registration_success' => "Registration successful. Welcome!",
     'login_success' => "Login successful. Welcome!",
-    'book_update_failed' => "Book update failed.",
-    'book_creation_failed' => "Book creation failed.",
+    'logout_success' => "Logout successful.",
     
 
     

@@ -46,7 +46,7 @@ class LoginController extends Controller
             Log::error('Login failed from the API', ['credentials' => $credentials['email']]);
 
             // Send an error message if user credentials are wrong
-            return $this->jsonResponse(401, __('auth.invalid_credentials'), null);
+            return $this->jsonResponse(401, "Invalid login credentials", null);
         }
 
         // Get the authenticated user

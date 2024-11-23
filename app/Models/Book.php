@@ -21,9 +21,9 @@ class Book extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
 
-    protected $keyType = 'string'; // Since `id` is a `char(36)` UUID
+    protected $keyType = 'string';
     protected $primaryKey = 'id';
-    public $incrementing = false; // UUIDs are not auto-incrementing
+    public $incrementing = false;
 
     protected $fillable = [
         'user_id', 

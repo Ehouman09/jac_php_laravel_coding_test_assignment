@@ -4,7 +4,7 @@
         <!-- ============================================================== -->
         <div class="dashboard-header">
             <nav class="navbar navbar-expand-lg bg-white fixed-top">
-                <a class="navbar-brand" href="{{ route('books.index') }}">CareerCross Library</a>
+                <a class="navbar-brand" href="{{ route('books.index') }}"> {{ __('common.navbar_title') }} </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -17,7 +17,7 @@
                                 <div class="nav-user-info">
                                     <h5 class="mb-0 text-white nav-user-name"> {{ Auth::user()->name }} </h5>
                                 </div>
-                                <a class="dropdown-item" href="{{ route('logout') }}""><i class="fas fa-power-off mr-2"></i>Logout</a>
+                                <a class="dropdown-item" href="{{ route('logout') }}""><i class="fas fa-power-off mr-2"></i> {{ __('auth.logout') }} </a>
                             </div>
                         </li>
                     </ul>

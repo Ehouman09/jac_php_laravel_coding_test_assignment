@@ -195,6 +195,10 @@ class BookController extends Controller
             'book_id' => $bookResource->id,
             'user_id' => Auth::user()->id
         ]);
+        
+        // Delete the library state from the cache after updating a book
+        $this->clearBooksCache();
+
 
         return $this->jsonResponse(200, "book updated", $bookResource);
 

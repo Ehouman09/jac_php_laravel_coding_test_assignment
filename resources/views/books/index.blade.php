@@ -8,19 +8,19 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <h5 class="modal-title" id="deleteModalLabel"> {{ __('book.delete_book') }} </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this book?
+                <p>{{ __('book.delete_book_confirmation') }}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close"> {{ __('common.cancel') }} </button>
                 <!-- The form is submitted once confirmed -->
                 <form id="deleteForm" action="" method="POST" style="display: inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger"> {{ __('book.delete') }} </button>
                 </form>
             </div>
         </div>
@@ -34,7 +34,7 @@
         <div class="page-header">
             <div class="ms-auto pageheader-btn" style="text-align: end">
                 <a href="{{route('books.create')}}" class="btn btn-danger btn-icon text-white me-2">
-                    <span></span> Add New Book
+                    <span> <i class="fe fe-plus"></i> </span> {{ __('book.add_book') }}
                 </a>
             </div>
         </div>
@@ -46,7 +46,7 @@
                 <div class="col-lg-4 col-md-4  col-12">
                     <div class="card info-card sales-card">
                         <div class="card-body">
-                            <h5 class="card-title">Total Books</h5>
+                            <h5 class="card-title"> {{ __('book.books') }} </h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-people-fill"></i>
@@ -63,7 +63,7 @@
                 <div class="col-lg-4 col-md-4  col-12">
                     <div class="card info-card revenue-card">
                         <div class="card-body">
-                            <h5 class="card-title">My recorded Books</h5>
+                            <h5 class="card-title"> {{ __('book.my_recorded_books') }} </h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-person-check"></i>
@@ -80,7 +80,7 @@
                 <div class="col-lg-4 col-md-4  col-12">
                     <div class="card info-card missing-card">
                         <div class="card-body">
-                            <h5 class="card-title">Book Categories</h5>
+                            <h5 class="card-title"> {{ __('book.categories') }} </h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-person-x"></i>
@@ -97,19 +97,19 @@
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="card">
-                        <h5 class="card-header">Books List</h5>
+                        <h5 class="card-header"> {{ __('book.book_list') }}</h5>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="books-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Cover Image</th>
-                                            <th>Title</th>
-                                            <th>Category</th>
-                                            <th>Author</th>
-                                            <th>Publication Year</th>
-                                            <th>Registration Date</th>
-                                            <th>Actions</th>
+                                            <th> {{ __('book.cover_image') }} </th>
+                                            <th> {{ __('book.title') }}</th>
+                                            <th> {{ __('book.category') }}</th>
+                                            <th> {{ __('book.author') }}</th>
+                                            <th> {{ __('book.publication_year') }}</th>
+                                            <th> {{ __('book.created_at') }}</th>
+                                            <th> {{ __('common.actions') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

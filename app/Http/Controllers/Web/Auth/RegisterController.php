@@ -31,7 +31,7 @@ class RegisterController extends Controller
         //Before displaying the registration form, let check if the user is already logged
         if (Auth::check()) {
             //redirect user to the books index if he's already logged
-            return redirect()->route('books.index')->with('warning', __('auth.yr_ar_already_logged'));
+            return redirect()->route('books.index')->with('warning', "You are already logged !");
         }
 
         //Display the registration form if the user is not logged
@@ -46,6 +46,8 @@ class RegisterController extends Controller
      */
     public function register(RegisterRequest $request) {
 
+        try {
+            // Get only validated input data
          // Get only validated input data
          $validatedData = $request->validated();
 
@@ -63,7 +65,15 @@ class RegisterController extends Controller
          Log::info('Registration successful', ['user' => $user->id]);
  
          // Let redirect the user to the the books index with a success message
-         return redirect()->route('books.index')->with('success', __('auth.registration_success'));
+         return redirect()->route('books.index')->with('success', "Registration successful. Welcome!");
+         
+         } catch (\Exception $e) {
+             // Log the failed registration attempt
+             Log::error('Registration failed', ['error' => $e->getMessage()]);
+ 
+             // Display an error message if registration fails
+             return redirect()->back()->with('error', "Registration failed.");
+         }
         
     }
 

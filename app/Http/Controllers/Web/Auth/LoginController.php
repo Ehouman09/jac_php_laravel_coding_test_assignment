@@ -28,7 +28,7 @@ class LoginController extends Controller
         //Before displaying the login form, let check if the user is already logged
         if (Auth::check()) {
             //redirect user to the index if he's already logged
-            return redirect()->route('books.index')->with('warning', __('auth.yr_ar_already_logged'));
+            return redirect()->route('books.index')->with('warning', "You are already logged !");
         }
 
         //Display the login form if the user is not logged
@@ -54,14 +54,14 @@ class LoginController extends Controller
             // Log in the user
             $request->session()->regenerate();
             // Redirect the user to the index with a success message
-            return redirect()->route('books.index')->with('success', __('common.welcome_msg'));
+            return redirect()->route('books.index')->with('success',  "Successfully logged in!");
         }
 
         // Log the failed login attempt
         Log::error('Login failed from the web', ['credentials' => $credentials['email']]);
 
         // Display an error message if user credentials are wrong 
-        return redirect()->back()->with('error', __('auth.invalid_credentials'))->withInput($credentials);
+        return redirect()->back()->with('error', "Invalid login credentials.")->withInput($credentials);
         
     }
 

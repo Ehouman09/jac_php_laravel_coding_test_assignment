@@ -121,7 +121,7 @@ class BookController extends Controller
             $this->clearBooksCache();
             
             return redirect()->route('books.index')
-                ->with('success', __('book.book_created_successfully'));
+                ->with('success', "Book created successfully.");
                 
         } catch (\Exception $e) {
 
@@ -131,7 +131,7 @@ class BookController extends Controller
             ]);
             
             return redirect()->route('books.index')
-                ->with('error', __('book.book_creation_failed'));
+                ->with('error', "Book creation failed.");
         }
         
     }
@@ -148,6 +148,7 @@ class BookController extends Controller
 
         // Get all categories for the book edit form.
         $categories = Category::all();
+        
 
         return view('books.edit', compact('book', 'categories'));
     }
@@ -200,7 +201,7 @@ class BookController extends Controller
             ]);
 
             return redirect()->route('books.index')
-                ->with('error', __('book.book_update_failed'));
+                ->with('error', "Book update failed.");
         }
  
 
@@ -210,10 +211,13 @@ class BookController extends Controller
             'user_id' => Auth::user()->id,
             'book_id' => $book->id
         ]);
+        
+        // Delete the library state from the cache after updating a book
+        $this->clearBooksCache();
 
          // Redirect to the books index page with a success message.
         return redirect()->route('books.index')
-            ->with('success', __('book.book_updated_successfully'));
+            ->with('success', "Book updated successfully.");
  
     }
 
@@ -252,7 +256,7 @@ class BookController extends Controller
 
         // Redirect to the books index page with a success message.
         return redirect()->route('books.index')
-            ->with('success', __('book.book_deleted_successfully'));
+            ->with('success', "Book deleted successfully.");
     }
 
     

@@ -62,7 +62,7 @@ class RegisterControllerTest extends TestCase
         // Attempt to access the registration route
         $response = $this->get(route('register'));
         $response->assertRedirect(route('books.index'));
-        $response->assertSessionHas('warning', __('auth.yr_ar_already_logged'));
+        $response->assertSessionHas('warning', "You are already logged !");
     }
 
     /**
@@ -92,7 +92,7 @@ class RegisterControllerTest extends TestCase
         $this->assertTrue(Auth::check());
 
         $response->assertRedirect(route('books.index'));
-        $response->assertSessionHas('success', __('auth.registration_success'));
+        $response->assertSessionHas('success', "Registration successful. Welcome!");
 
         $this->assertDatabaseHas('users', [
             'email' => $data['email'],
